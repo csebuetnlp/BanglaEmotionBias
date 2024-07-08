@@ -91,8 +91,7 @@ def tsne_and_scatterplot(
     ax.legend()
     plt.show()
 
-
-with open("embeddings.pkl", "rb") as file:
+with open("./embeddings.pkl", "rb") as file:
     embeddings = pickle.load(file)
 
 male_embeddings = embeddings["male"]
@@ -101,3 +100,5 @@ female_embeddings = embeddings["female"]
 tsne_and_scatterplot(
     male_embeddings=male_embeddings, female_embeddings=female_embeddings
 )
+
+# The 

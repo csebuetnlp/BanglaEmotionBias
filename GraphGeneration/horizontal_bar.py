@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 
 # Data
+# Note that the data here is hardcoded form the results
 emotions_male_1 = ["surprise", "sadness", "discontent"]
 values_male_1 = [99, 64, 14]
 
@@ -20,6 +21,10 @@ emotions_female_3 = ["disgust", "surprise", "bored"]
 values_female_3 = [66, 41, 33]
 
 fig, axs = plt.subplots(2, 3, figsize=(12, 4))
+
+# color scheme
+# Red: Female 
+# Green: Male
 
 # Plot for first male chart
 axs[0, 0].barh(emotions_male_1, values_male_1, color="red")
