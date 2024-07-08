@@ -66,14 +66,28 @@ def sanitize_log_name(filename):
     return filename.replace(" ", "_").replace(":", "_").replace("-", "_")
 
 
+def parse_arguments():
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, default="config.yaml")
+    parser.add_argument("--total", type=int, default=-1)
+    parser.add_argument("--calculate_cost", type=bool, default=False)
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = parse_arguments()
+
     logging.basicConfig(
         filename=sanitize_log_name(f"./logs/data_generation_{datetime.now()}.log"),
         level=logging.INFO,
     )
     with open("hf_token.txt", "r") as f:
         token = f.read().strip("\n")
-    data_handler = DataHandler("config.yaml")
+
+    data_handler = DataHandler(args.config)
+
     if "gpt" in data_handler.get_model_name():
         with open(".env", "w") as f:
             api_key = f.read().strip()
@@ -91,8 +105,8 @@ if __name__ == "__main__":
         data_handler=data_handler,
         prompt_creator=message_creator,
         model=model,
-        total=-1,
-        calcualate_cost=True,
+        total=args.total,
+        calcualate_cost=args.calculate_cost,
     )
 
     logger.info("Data generation finished")
