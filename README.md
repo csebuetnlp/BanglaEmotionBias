@@ -15,7 +15,6 @@ This is the official repository containing the codes and instructions to generat
   - [Prompt Creation](#prompt-creation)
   - [Model Inference](#model-inference)
   - [Results Generation](#results-generation)
-  - [Bias in Role Selection for Multiple LLMs](#bias-in-role-selection-for-multiple-llms)
   - [License](#license)
   - [Citation](#citation)
 
@@ -110,7 +109,7 @@ For creating the `prompt`, the template is: "নিম্নোক্ত মন�
 ## Model Inference
 
 All the codes needed for model inference are in `./DataGeneration/`.
-For any inference on a single model for different prompting templates and categories, one needs to first create the config file. The examples are given in `./DataGeneration/config_{probe}_{category}.yaml`
+For any inference on a single model for different prompting templates and categories, one needs to first create the config file. An example is given in `./DataGeneration/config.yaml`
 
 For openAI models, the api key has to be kept in the file `./DataGeneration/.env` and for llama3, the hf token has to be kept in `./DataGeneration/hf_token.txt`. To add the openAI api key, run the following command:
 ```bash
@@ -119,37 +118,59 @@ $ export $(cat .env | xargs) && env
 After completing the prerequisites, the following command has to be executed:
 
 ```bash
-$ python executor.py --config [config_file_name] --data_handler [data handler name: template, ibe or ebe] --total [total number of prompts/-1 for all]
+$ cd DataGeneration
+$ python executor.py --config [config_file_name] --total [total number of prompts/-1 for all]
 ```
+The responses will be saved in the directory as mentioned in config file. The responses will be in a folder named after the data entry ID.
 
 ## Results Generation 
 
-The codes for result generation from the responses can be found in `GraphGeneration/FileAnalysis.ipynb`
+The codes for result generation from the responses can be found in `GraphGeneration` folder. The results that we generated are mainly:
+- Frequency Reporting through Spider Graph
+- Unique Emotion Words for each Persona
+- Emotion Shift Graph
 
-We find significant bias in the case of both gender and religion in two probing techniques, which are outlined in detail in the paper.
-
-## Bias in Role Selection for Multiple LLMs
+For generating the spider graph, we need to report the top eight emotions inside the files `GraphGeneration/ordered_list_I1_latest.csv` and `GraphGeneration/ordered_list_I2_latest.csv` for templates **I1** and **I2** respectively, and run the following command:
+```bash
+$ cd GraphGeneration
+$ python spider_chart.py
+```
+The result we showcased in the paper is as follows:
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
     <div style="flex: 0 0 48%;">
-        <img src="Figures/template_gender_positive.png" alt="DI Scores for Gender Bias (Positive Traits)" style="width: 100%;">
-        <p style="text-align: center;">DI Scores for Gender Bias (Positive Traits)</p>
+        <img src="Figures/spider_1.png" alt="DI Scores for Gender Bias (Positive Traits)" style="width: 100%;">
+        <p style="text-align: center;">Frequency Spider Graph for template: I1</p>
     </div>
     <div style="flex: 0 0 48%;">
-        <img src="Figures/template_gender_negative.png" alt="DI Scores for Gender Bias (Negative Traits)" style="width: 100%;">
-        <p style="text-align: center;">DI Scores for Gender Bias (Negative Traits)</p>
-    </div>
-    <div style="flex: 0 0 45%;">
-        <img src="Figures/template_religion_positive.png" alt="DI Scores for Religious Bias (Positive Traits)" style="width: 100%;">
-        <p style="text-align: center;">DI Scores for Religious Bias (Positive Traits)</p>
-    </div>
-    <div style="flex: 0 0 45%;">
-        <img src="Figures/template_religion_negative.png" alt="DI Scores for Religious Bias (Negative Traits)" style="width: 100%;">
-        <p style="text-align: center;">DI Scores for Religious Bias (Negative Traits)</p>
+        <img src="Figures/spider_2.png" alt="DI Scores for Gender Bias (Negative Traits)" style="width: 100%;">
+        <p style="text-align: center;">Frequency Spider Graph for template: I2</p>
     </div>
 </div>
 
-*Figure: Bias in role selection for multiple LLMs in the case of template-based probing for gender and religion data. We present positive and negative traits results separately. The upper bound is set to 3 and 4 for gender and religion respectively. The neutral line (DI = 1) is highlighted in all the figures.*
+*Figure: Distributions of different emotion attributes for male and female genders for all LLMs applying two different prompt templates.*
+
+For emotion shift horizontal bar plot, run the following command.
+```bash
+$ python horizontal_bar.py
+``` 
+The result presented in the paper is:
+![Emotion_shift](Figures/emotion_shift.png)
+
+*Figure: Comparison of Most Attributed Emotion Words Between Genders (Prompt Template I2). Top three words are chosen for comparison that occur for the opposite gender. Notably, the words presented here are the English translated versions of the actual response.*
+
+The codes for Unique Word Findings for each persona is given inside `./DataPreprocessing/emotionalDataAnalysis.ipynb`. Please refer to the paper for the results. Lastly, for the embeddings plot in reduced dimension (two-dimension to be specific), run the command:
+```bash
+$ cd GraphGeneration
+$ python embeddings_scatter.py
+```
+We provide the collected embeddings of the unique words inside `embeddings.pkl` file organized with the word as key and embedding as value. The generated graph is as follows:
+![Embeddings_plot](Figures/embeddings_plot.png)
+*Figure: t-SNE visualization of GloVe word embeddings for unique emotion words generated by LLMs for male and female genders using prompt template **I2***
+
+
+The results are showcased and analyzed in details inside `Section 6: Results and Evaluation` of the [paper-link here]().
+
 
 
 ## License

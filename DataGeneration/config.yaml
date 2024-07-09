@@ -1,4 +1,4 @@
 model: gpt-4o
-emotion_data_path: ../Data/BanglaEmotion/dataset/aacl_dataset_short.csv
-storage_folder_path: ../Data/Storage_GPT4V2/
+emotion_data_path: ../Data/processed_dataset.csv
+storage_folder_path: ../Data/Storage/
 prompt_version: 2
