@@ -135,7 +135,7 @@ For generating the spider graph, we need to report the top eight emotions inside
 $ cd GraphGeneration
 $ python spider_chart.py
 ```
-The result we showcased in the paper is as follows:
+<!-- The result we showcased in the paper is as follows:
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
     <div style="flex: 0 0 48%;">
@@ -148,7 +148,7 @@ The result we showcased in the paper is as follows:
     </div>
 </div>
 
-*Figure: Distributions of different emotion attributes for male and female genders for all LLMs applying two different prompt templates.*
+*Figure: Distributions of different emotion attributes for male and female genders for all LLMs applying two different prompt templates.* -->
 
 For emotion shift horizontal bar plot, run the following command.
 ```bash
